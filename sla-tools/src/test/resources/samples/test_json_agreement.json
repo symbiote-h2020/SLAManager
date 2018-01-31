@@ -1,0 +1,63 @@
+{
+    "AgreementId": "json-agreement",
+    "Name": "ExampleAgreement",
+    "Context": {
+        "AgreementInitiator": "client-prueba",
+        "ExpirationTime": "2014-03-07T12:00:00Z",
+        "TemplateId": "template02",
+        "Service": "service02",
+        "ServiceProvider": "AgreementResponder",
+        "AgreementResponder": "provider02",
+        "any" : [ 
+            {
+                "CreationTime" : "1970-01-01T00:01:00Z"
+            },
+            {
+                "Monitoring": "monitoringEntity"
+            }
+        ]
+    },
+    "Terms": {
+        "All": {
+            "ServiceDescriptionTerm": null,
+            "ServiceProperties": [{
+                "Name": "ServiceProperties",
+                "ServiceName": "ServiceName",
+                "VariableSet": {
+                    "Variable": [{
+                        "Name": "metric1",
+                        "Metric": "xs:double",
+                        "Location": "metric1"
+                    }, {
+                        "Name": "metric2",
+                        "Metric": "xs:double",
+                        "Location": "metric2"
+                    }, {
+                        "Name": "metric3",
+                        "Metric": "xs:double",
+                        "Location": "metric3"
+                    }, {
+                        "Name": "metric4",
+                        "Metric": "xs:double",
+                        "Location": "metric4"
+                    }]
+                }
+            }],
+            "GuaranteeTerm": [{
+                "Name": "GT_Metric1",
+                "ServiceScope": {
+                    "ServiceName": "ServiceName",
+                    "value": ""
+                },
+                "ServiceLevelObjective": {
+                    "KPITarget": {
+                        "KPIName": "metric1",
+                        "CustomServiceLevel": {
+                            "any": [{"Constraint" : "metric1 BETWEEN (0.05, 1)"}]
+                        }
+                    }
+                }
+            }]
+        }
+    }
+}

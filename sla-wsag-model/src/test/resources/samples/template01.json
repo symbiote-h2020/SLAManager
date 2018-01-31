@@ -1,0 +1,68 @@
+{
+  "TemplateId" : "template01",
+  "Name" : "ExampleTemplate",
+  "Context" : {
+    "any" : [ 
+      {
+        "CreationTime" : "1970-01-01T00:01:00Z"
+      }, {
+        "value" : "barElem"
+      } 
+    ],
+    "AgreementInitiator" : "provider02",
+    "AgreementResponder" : "provider01",
+    "ServiceProvider" : "AgreementInitiator",
+    "ExpirationTime" : "2014-03-07T11:00:00Z",
+    "TemplateId" : "template01",
+    "Service" : "service3"
+  },
+  "Terms" : {
+    "All" : {
+      "ServiceDescriptionTerm" : {
+        "Name" : "GetCoordsOperation",
+        "ServiceName" : "GPSService0001"
+      },
+      "ServiceProperties" : [ {
+        "Name" : "AvailabilityProperties",
+        "ServiceName" : "GPS0001",
+        "VariableSet" : {
+          "Variable" : [ {
+            "Name" : "ResponseTime",
+            "Metric" : "metric:Duration",
+            "Location" : "qos:ResponseTime"
+          }, {
+            "Name" : "Availability",
+            "Metric" : "metric:Percentage",
+            "Location" : "qos:Availability"
+          } ]
+        }
+      }, {
+        "Name" : "UsabilityProperties",
+        "ServiceName" : "GPS0001"
+      } ],
+      "GuaranteeTerm" : [ {
+        "Name" : "FastReaction",
+        "ServiceScope" : {
+          "value" : "http://www.gps.com/coordsservice/getcoords",
+          "ServiceName" : "GPS0001"
+        },
+        "ServiceLevelObjective" : {
+          "KPITarget" : {
+            "KPIName" : "FastResponseTime",
+            "CustomServiceLevel" : {
+              "any" : [ {
+                "Constraint" : "ResponseTime LT 200",
+                "ViolationWindow" : [ {
+                  "count" : 2,
+                  "interval" : "PT30M"
+                } ],
+                "Description" : ""
+              } ]
+            }
+          }
+        },
+        "QualifyingCondition" : "applied when current time in week working hours"
+      } ]
+    }
+  }
+}

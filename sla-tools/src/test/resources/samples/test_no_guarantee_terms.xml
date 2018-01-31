@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright 2017 Atos
+
+       Licensed under the Apache License, Version 2.0 (the "License");
+       you may not use this file except in compliance with the License.
+       You may obtain a copy of the License at
+
+           http://www.apache.org/licenses/LICENSE-2.0
+
+       Unless required by applicable law or agreed to in writing, software
+       distributed under the License is distributed on an "AS IS" BASIS,
+       WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+       See the License for the specific language governing permissions and
+       limitations under the License.
+
+-->
+<wsag:Template wsag:TemplateId="52b4088d-cf0d-4531-a49c-b0c76490c653" 
+        xmlns:wsag="http://www.ggf.org/namespaces/ws-agreement" xmlns:sla="http://sla.atos.eu">
+    <wsag:Name>Send Invoice SaaS (test CAMEL v2) SLA Template</wsag:Name>
+    <wsag:Context>
+        <wsag:AgreementResponder>bwcon</wsag:AgreementResponder>
+        <wsag:ServiceProvider>AgreementResponder</wsag:ServiceProvider>
+        <sla:Service>test</sla:Service>
+    </wsag:Context>
+    <wsag:Terms>
+        <wsag:All/>
+    </wsag:Terms>
+</wsag:Template>

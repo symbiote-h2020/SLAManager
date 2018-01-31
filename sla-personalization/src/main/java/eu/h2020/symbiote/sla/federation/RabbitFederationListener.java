@@ -24,6 +24,7 @@ import eu.atos.sla.datamodel.EProvider;
 import eu.atos.sla.enforcement.IEnforcementService;
 import eu.atos.sla.evaluation.constraint.simple.Operator;
 import eu.h2020.symbiote.model.mim.Federation;
+import eu.h2020.symbiote.model.mim.FederationMember;
 import eu.h2020.symbiote.model.mim.QoSConstraint;
 import eu.h2020.symbiote.sla.SLAConstants;
 
@@ -49,9 +50,6 @@ public class RabbitFederationListener {
   private String platformId;
   
   @Autowired
-  FederationRepository federationRepository;
-  
-  @Autowired
   IProviderDAO providerDAO;
   
   @Autowired
@@ -61,14 +59,30 @@ public class RabbitFederationListener {
   private IEnforcementService enforcementService;
   
   @RabbitListener(bindings = @QueueBinding(
+      value = @Queue(value = SLAConstants.SLA_UNREGISTRATION_QUEUE_NAME, durable = "true",
+          exclusive = "true", autoDelete = "true"),
+      exchange = @Exchange(value = SLAConstants.EXCHANGE_NAME_FM, durable = "true"),
+      key = SLAConstants.FEDERATION_UNREGISTRATION_KEY)
+  )
+  public void federationRemoval(@Payload Federation federation) {
+    deleteAgreement(federation.getId());
+  }
+  
+  @RabbitListener(bindings = @QueueBinding(
       value = @Queue(value = SLAConstants.SLA_REGISTRATION_QUEUE_NAME, durable = "true",
           exclusive = "true", autoDelete = "true"),
       exchange = @Exchange(value = SLAConstants.EXCHANGE_NAME_FM, durable = "true"),
       key = SLAConstants.FEDERATION_REGISTRATION_KEY)
   )
-  public void resourceRegistration(@Payload Federation federation) {
+  public void federationUpdate(@Payload Federation federation) {
+  
+    deleteAgreement(federation.getId());
     
-    Optional<Federation> existing = federationRepository.findById(federation.getId());
+    Optional<FederationMember> existing = federation.getMembers().stream()
+                                              .filter(member ->
+                                                          platformId.equals(member.getPlatformId()))
+                                              .findFirst();
+    
     if (existing.isPresent()) {
       
       EProvider provider = providerDAO.getByName(platformId);
@@ -93,10 +107,18 @@ public class RabbitFederationListener {
       
       enforcementService.createEnforcementJob(agreement.getAgreementId());
       enforcementService.startEnforcement(agreement.getAgreementId());
-      
-      federationRepository.save(federation);
     }
     
+  }
+  
+  private void deleteAgreement(String agreementId) {
+    EAgreement existingAgreement = agreementDAO.getByAgreementId(agreementId);
+  
+    if (existingAgreement != null) {
+      enforcementService.stopEnforcement(agreementId);
+      enforcementService.deleteEnforcementJobByAgreementId(agreementId);
+      agreementDAO.delete(existingAgreement);
+    }
   }
   
   private List<EGuaranteeTerm> getGuaranteeTerms(List<QoSConstraint> slaConstraints) {

@@ -18,11 +18,15 @@ package eu.h2020.symbiote.sla.monitoring;
 
 import eu.atos.sla.monitoring.IMetricsRetriever;
 import eu.atos.sla.monitoring.IMonitoringMetric;
+import eu.atos.sla.monitoring.simple.kairos.DummyMetricsRetriever;
 
 import feign.Feign;
 import feign.jackson.JacksonDecoder;
 import feign.jackson.JacksonEncoder;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
 
 import java.util.Date;
@@ -30,17 +34,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class SymbioteMetricRetriever implements IMetricsRetriever {
+public class SymbioteMetricRetriever implements IMetricsRetriever,InitializingBean {
   
-  @Value("symbiote.monitoring.url")
+  private static final Logger logger = LoggerFactory.getLogger(DummyMetricsRetriever.class);
+  
+  @Value("${symbiote.monitoring.url}")
   private String monitoringUrl;
   
   private MonitoringClient client;
-  
-  public SymbioteMetricRetriever() {
-    client = Feign.builder().encoder(new JacksonEncoder()).decoder(new JacksonDecoder())
-                 .target(MonitoringClient.class, monitoringUrl);
-  }
   
   @Override
   public List<IMonitoringMetric> getMetrics(String agreementId, String serviceScope, String variable,
@@ -50,6 +51,14 @@ public class SymbioteMetricRetriever implements IMetricsRetriever {
     return result.entrySet().stream()
                .map(entry -> new SymbioteMonitoringMetric(entry.getKey(), entry.getValue(), end))
                .collect(Collectors.toList());
+    
+  }
+  
+  @Override
+  public void afterPropertiesSet() throws Exception {
+  
+    client = Feign.builder().encoder(new JacksonEncoder()).decoder(new JacksonDecoder())
+                 .target(MonitoringClient.class, monitoringUrl);
     
   }
 }

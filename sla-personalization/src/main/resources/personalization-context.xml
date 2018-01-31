@@ -18,11 +18,18 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
     xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
-    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:context="http://www.springframework.org/schema/context" xmlns:rabbit="http://www.springframework.org/schema/rabbit"
     xsi:schemaLocation="http://www.springframework.org/schema/beans 
                         http://www.springframework.org/schema/beans/spring-beans.xsd        
                         http://www.springframework.org/schema/context 
-                        http://www.springframework.org/schema/context/spring-context.xsd">
+                        http://www.springframework.org/schema/context/spring-context.xsd
+                        http://www.springframework.org/schema/rabbit
+                        http://www.springframework.org/schema/rabbit/spring-rabbit-1.7.xsd">
+
+    <context:component-scan base-package="eu.h2020.symbiote.sla" />
+
+    <context:annotation-config />
+    <rabbit:annotation-driven />
     
     <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
         <property name="systemPropertiesModeName" value="SYSTEM_PROPERTIES_MODE_OVERRIDE"/>
@@ -36,5 +43,26 @@
         </property>
         <property name="ignoreUnresolvablePlaceholders" value="true"/>
     </bean>
+
+    <rabbit:connection-factory id="connectionFactory"
+                               host="localhost" username="guest" password="guest" />
+
+    <rabbit:template id="amqpTemplate" connection-factory="connectionFactory"/>
+
+    <bean id="rabbitListenerContainerFactory"
+          class="org.springframework.amqp.rabbit.config.DirectRabbitListenerContainerFactory">
+        <property name="connectionFactory" ref="connectionFactory"/>
+        <property name="consumersPerQueue" value="3"/>
+    </bean>
+
+    <rabbit:admin connection-factory="connectionFactory" />
+
+    <rabbit:queue name="symbIoTe.fm.sla.update" durable="true" exclusive="true" auto-delete="true" />
+
+    <rabbit:queue name="symbIoTe.fm.sla.unregistration" durable="true" exclusive="true" auto-delete="true"/>
+
+    <rabbit:direct-exchange name="symbIoTe.federation" durable="true" />
+
+    <rabbit:direct-exchange name="symbiote.slam" durable="true" />
 
 </beans>

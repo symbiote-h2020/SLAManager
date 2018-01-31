@@ -14,15 +14,30 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package eu.h2020.symbiote.sla;
+package eu.h2020.symbiote.sla.notification;
 
-public interface SLAConstants {
-  String EXCHANGE_NAME_SLAM = "symbiote.slam";
-  String VIOLATION_KEY = "federation.sla.violation";
+import java.util.ArrayList;
+import java.util.List;
+
+public class ViolationNotification {
   
-  String EXCHANGE_NAME_FM = "symbIoTe.federation";
-  String SLA_REGISTRATION_QUEUE_NAME = "symbIoTe.fm.sla.update";
-  String SLA_UNREGISTRATION_QUEUE_NAME = "symbIoTe.fm.sla.unregistration";
-  String FEDERATION_REGISTRATION_KEY = "symbIoTe.federation.changed";
-  String FEDERATION_UNREGISTRATION_KEY = "symbIoTe.federation.deleted";
+  private String federationId;
+  
+  private List<Violation> violations = new ArrayList<>();
+  
+  public String getFederationId() {
+    return federationId;
+  }
+  
+  public void setFederationId(String federationId) {
+    this.federationId = federationId;
+  }
+  
+  public List<Violation> getViolations() {
+    return violations;
+  }
+  
+  public void setViolations(List<Violation> violations) {
+    this.violations = violations;
+  }
 }

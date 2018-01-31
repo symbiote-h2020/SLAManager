@@ -14,11 +14,27 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package eu.h2020.symbiote.sla.federation;
+package eu.h2020.symbiote.sla.notification;
 
-import eu.h2020.symbiote.model.mim.Federation;
-
-import org.springframework.data.mongodb.repository.MongoRepository;
-
-public interface FederationRepository extends MongoRepository<Federation, String> {
+public class Violation {
+  
+  private String constraint;
+  
+  private String actualValue;
+  
+  public String getConstraint() {
+    return constraint;
+  }
+  
+  public void setConstraint(String constraint) {
+    this.constraint = constraint;
+  }
+  
+  public String getActualValue() {
+    return actualValue;
+  }
+  
+  public void setActualValue(String actualValue) {
+    this.actualValue = actualValue;
+  }
 }

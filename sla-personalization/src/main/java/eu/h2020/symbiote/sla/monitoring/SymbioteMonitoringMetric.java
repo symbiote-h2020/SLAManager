@@ -39,7 +39,7 @@ public class SymbioteMonitoringMetric implements IMonitoringMetric{
   
   @Override
   public String getMetricValue() {
-    return metricKey;
+    return metricValue;
   }
   
   @Override

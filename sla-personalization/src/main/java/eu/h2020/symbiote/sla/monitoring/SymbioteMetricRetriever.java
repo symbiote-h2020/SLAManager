@@ -57,8 +57,12 @@ public class SymbioteMetricRetriever implements IMetricsRetriever,InitializingBe
   @Override
   public void afterPropertiesSet() throws Exception {
   
-    client = Feign.builder().encoder(new JacksonEncoder()).decoder(new JacksonDecoder())
-                 .target(MonitoringClient.class, monitoringUrl);
+    setClient(Feign.builder().encoder(new JacksonEncoder()).decoder(new JacksonDecoder())
+                           .target(MonitoringClient.class, monitoringUrl));
     
+  }
+  
+  public void setClient(MonitoringClient client) {
+    this.client = client;
   }
 }

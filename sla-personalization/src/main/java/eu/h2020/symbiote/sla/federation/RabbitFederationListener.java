@@ -67,29 +67,28 @@ public class RabbitFederationListener {
       value = @Queue(value = SLAConstants.SLA_UNREGISTRATION_QUEUE_NAME, durable = "true",
           exclusive = "true", autoDelete = "true"),
       exchange = @Exchange(value = SLAConstants.EXCHANGE_NAME_FM, durable = "true"),
-      key = SLAConstants.FEDERATION_UNREGISTRATION_KEY)
+      key = SLAConstants.FEDERATION_DELETED_KEY)
   )
   public void federationRemoval(@Payload Federation federation) {
     deleteAgreement(federation.getId());
   }
   
   @RabbitListener(bindings = @QueueBinding(
-      value = @Queue(value = SLAConstants.SLA_REGISTRATION_QUEUE_NAME, durable = "true",
+      value = @Queue(value = SLAConstants.SLA_UPDATE_QUEUE_NAME, durable = "true",
           exclusive = "true", autoDelete = "true"),
       exchange = @Exchange(value = SLAConstants.EXCHANGE_NAME_FM, durable = "true"),
-      key = SLAConstants.FEDERATION_REGISTRATION_KEY)
+      key = SLAConstants.FEDERATION_UPDATE_KEY)
   )
-  public void federationUpdate(@Payload Federation federation) {
-  
+  public void federationUpdated(@Payload Federation federation) {
     deleteAgreement(federation.getId());
-    
+  
     Optional<FederationMember> existing = federation.getMembers().stream()
                                               .filter(member ->
                                                           platformId.equals(member.getPlatformId()))
                                               .findFirst();
-    
+  
     if (existing.isPresent()) {
-      
+    
       EProvider provider = providerDAO.getByName(platformId);
       if (provider == null) {
         provider = new EProvider();
@@ -97,7 +96,7 @@ public class RabbitFederationListener {
         provider.setUuid(UUID.randomUUID().toString());
         provider = providerDAO.save(provider);
       }
-  
+    
       ETemplate template = new ETemplate();
       template.setProvider(provider);
       template.setName(federation.getId());
@@ -105,7 +104,7 @@ public class RabbitFederationListener {
       template.setUuid(UUID.randomUUID().toString());
       template.setServiceId(platformId);
       template = templateDAO.save(template);
-  
+    
       EAgreement agreement = new EAgreement();
       agreement.setTemplate(template);
       agreement.setProvider(provider);
@@ -114,15 +113,24 @@ public class RabbitFederationListener {
       agreement.setCreationDate(new Date());
       agreement.setName(federation.getId());
       agreement.setServiceId(federation.getId());
-      
+    
       agreement.setGuaranteeTerms(getGuaranteeTerms(federation.getSlaConstraints()));
-      
+    
       agreement = agreementDAO.save(agreement);
-      
+    
       enforcementService.createEnforcementJob(agreement.getAgreementId());
       enforcementService.startEnforcement(agreement.getAgreementId());
     }
-    
+  }
+  
+  @RabbitListener(bindings = @QueueBinding(
+      value = @Queue(value = SLAConstants.SLA_REGISTRATION_QUEUE_NAME, durable = "true",
+          exclusive = "true", autoDelete = "true"),
+      exchange = @Exchange(value = SLAConstants.EXCHANGE_NAME_FM, durable = "true"),
+      key = SLAConstants.FEDERATION_CREATION_KEY)
+  )
+  public void federationCreation(@Payload Federation federation) {
+    federationUpdated(federation);
   }
   
   private void deleteAgreement(String agreementId) {
@@ -178,7 +186,7 @@ public class RabbitFederationListener {
         break;
     }
     
-    return kpiName + " " + comparator.toString() + constraint.getThreshold();
+    return kpiName + " " + comparator.toString() + " " + constraint.getThreshold();
   }
   
   public String getKpiName(QoSConstraint constraint) {

@@ -22,7 +22,9 @@ public interface SLAConstants {
   
   String EXCHANGE_NAME_FM = "symbIoTe.federation";
   String SLA_REGISTRATION_QUEUE_NAME = "symbIoTe.fm.sla.update";
+  String SLA_UPDATE_QUEUE_NAME = "symbIoTe.fm.sla.update";
   String SLA_UNREGISTRATION_QUEUE_NAME = "symbIoTe.fm.sla.unregistration";
-  String FEDERATION_REGISTRATION_KEY = "symbIoTe.federation.changed";
-  String FEDERATION_UNREGISTRATION_KEY = "symbIoTe.federation.deleted";
+  String FEDERATION_CREATION_KEY = "symbIoTe.federation.created";
+  String FEDERATION_UPDATE_KEY = "symbIoTe.federation.changed";
+  String FEDERATION_DELETED_KEY = "symbIoTe.federation.deleted";
 }

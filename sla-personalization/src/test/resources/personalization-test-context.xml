@@ -42,4 +42,10 @@
         <property name="ignoreUnresolvablePlaceholders" value="true"/>
     </bean>
 
+    <bean id="notificationManager" class="eu.atos.sla.notification.NotifierManager">
+        <property name="agreementEnforcementNotifier">
+            <bean class="eu.h2020.symbiote.sla.test.MockEnforcementNotifier"/>
+        </property>
+    </bean>
+
 </beans>

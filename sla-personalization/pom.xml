@@ -53,6 +53,20 @@
             <artifactId>sla-tools</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>eu.atos.sla</groupId>
+            <artifactId>sla-repository</artifactId>
+            <type>test-jar</type>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>eu.atos.sla</groupId>
+            <artifactId>sla-enforcement</artifactId>
+            <type>test-jar</type>
+            <scope>test</scope>
+        </dependency>
+
         <!-- symbiote dependencies -->
         <dependency>
             <groupId>com.github.symbiote-h2020</groupId>
@@ -82,6 +96,19 @@
             <groupId>io.github.openfeign</groupId>
             <artifactId>feign-jackson</artifactId>
             <version>9.5.1</version>
+        </dependency>
+
+        <!-- Spring dependencies -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.hsqldb</groupId>
+            <artifactId>hsqldb</artifactId>
+            <scope>test</scope>
         </dependency>
 
     </dependencies>

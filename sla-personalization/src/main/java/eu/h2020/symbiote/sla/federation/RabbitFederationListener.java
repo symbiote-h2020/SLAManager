@@ -18,9 +18,11 @@ package eu.h2020.symbiote.sla.federation;
 
 import eu.atos.sla.dao.IAgreementDAO;
 import eu.atos.sla.dao.IProviderDAO;
+import eu.atos.sla.dao.ITemplateDAO;
 import eu.atos.sla.datamodel.EAgreement;
 import eu.atos.sla.datamodel.EGuaranteeTerm;
 import eu.atos.sla.datamodel.EProvider;
+import eu.atos.sla.datamodel.ETemplate;
 import eu.atos.sla.enforcement.IEnforcementService;
 import eu.atos.sla.evaluation.constraint.simple.Operator;
 import eu.h2020.symbiote.model.mim.Federation;
@@ -51,6 +53,9 @@ public class RabbitFederationListener {
   
   @Autowired
   IProviderDAO providerDAO;
+  
+  @Autowired
+  ITemplateDAO templateDAO;
   
   @Autowired
   IAgreementDAO agreementDAO;
@@ -93,7 +98,16 @@ public class RabbitFederationListener {
         provider = providerDAO.save(provider);
       }
   
+      ETemplate template = new ETemplate();
+      template.setProvider(provider);
+      template.setName(federation.getId());
+      template.setText(federation.getId());
+      template.setUuid(UUID.randomUUID().toString());
+      template.setServiceId(platformId);
+      template = templateDAO.save(template);
+  
       EAgreement agreement = new EAgreement();
+      agreement.setTemplate(template);
       agreement.setProvider(provider);
       agreement.setAgreementId(federation.getId());
       agreement.setConsumer(federation.getId());
@@ -117,55 +131,69 @@ public class RabbitFederationListener {
     if (existingAgreement != null) {
       enforcementService.stopEnforcement(agreementId);
       enforcementService.deleteEnforcementJobByAgreementId(agreementId);
+      ETemplate template = existingAgreement.getTemplate();
       agreementDAO.delete(existingAgreement);
+      templateDAO.delete(template);
     }
   }
   
-  private List<EGuaranteeTerm> getGuaranteeTerms(List<QoSConstraint> slaConstraints) {
+  public List<EGuaranteeTerm> getGuaranteeTerms(List<QoSConstraint> slaConstraints) {
     List<EGuaranteeTerm> guaranteeTerms = new ArrayList<>();
     for (QoSConstraint constraint : slaConstraints) {
-      EGuaranteeTerm term = new EGuaranteeTerm();
-      String kpiName = constraint.getMetric().toString();
-      if (constraint.getResourceType() != null) {
-        kpiName = kpiName + "." + constraint.getResourceType();
-      }
-      
-      String duration = "all";
-      if (constraint.getDuration() != null) {
-        duration = constraint.getDuration().toString();
-      }
-      
-      kpiName = kpiName + "." + duration;
-      
-      term.setKpiName(kpiName);
-      
-      String serviceLevel = kpiName;
-      Operator comparator = null;
-      switch (constraint.getComparator()) {
-        case equal:
-          comparator = Operator.EQ;
-          break;
-        case lessThanOrEqual:
-          comparator = Operator.LE;
-          break;
-        case lessThan:
-          comparator = Operator.LT;
-          break;
-        case greaterThan:
-          comparator = Operator.GT;
-          break;
-        case greaterThanOrEqual:
-          comparator = Operator.GE;
-          break;
-      }
-      
-      String slo = kpiName + " " + comparator.toString() + constraint.getThreshold();
-      
-      term.setServiceLevel(slo);
-      
+      EGuaranteeTerm term = geteGuaranteeTerm(constraint);
       guaranteeTerms.add(term);
     }
     return guaranteeTerms;
+  }
+  
+  public EGuaranteeTerm geteGuaranteeTerm(QoSConstraint constraint) {
+    EGuaranteeTerm term = new EGuaranteeTerm();
+    String kpiName = getKpiName(constraint);
+    
+    term.setKpiName(kpiName);
+    
+    String slo = getSlo(constraint, kpiName);
+    
+    term.setServiceLevel(slo);
+    return term;
+  }
+  
+  public String getSlo(QoSConstraint constraint, String kpiName) {
+    Operator comparator = null;
+    switch (constraint.getComparator()) {
+      case equal:
+        comparator = Operator.EQ;
+        break;
+      case lessThanOrEqual:
+        comparator = Operator.LE;
+        break;
+      case lessThan:
+        comparator = Operator.LT;
+        break;
+      case greaterThan:
+        comparator = Operator.GT;
+        break;
+      case greaterThanOrEqual:
+        comparator = Operator.GE;
+        break;
+    }
+    
+    return kpiName + " " + comparator.toString() + constraint.getThreshold();
+  }
+  
+  public String getKpiName(QoSConstraint constraint) {
+    String kpiName = constraint.getMetric().toString();
+    if (constraint.getResourceType() != null) {
+      kpiName = kpiName + "." + constraint.getResourceType();
+    }
+    
+    String duration = "all";
+    if (constraint.getDuration() != null) {
+      duration = constraint.getDuration().toString();
+    }
+    
+    kpiName = kpiName + "." + duration;
+    return kpiName;
   }
   
 }

@@ -15,7 +15,10 @@
  */
 package eu.atos.sla.datamodel;
 
+import org.hibernate.annotations.Fetch;
+
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -29,8 +32,6 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-
-import org.hibernate.annotations.Fetch;
 
 
 /**
@@ -97,9 +98,9 @@ public class EGuaranteeTerm extends AbstractEntity<EGuaranteeTerm> implements Se
     private String serviceScope;
     private String kpiName;
     private String serviceLevel;
-    private List<EViolation> violations;
-    private List<EPenalty> penalties;
-    private List<EPolicy> policies;
+    private List<EViolation> violations = new ArrayList<>();
+    private List<EPenalty> penalties = new ArrayList<>();
+    private List<EPolicy> policies = new ArrayList<>();
     private GuaranteeTermStatusEnum status;
     private EBusinessValueList businessValueList;
 

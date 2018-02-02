@@ -19,11 +19,11 @@ public class MockEnforcementNotifier implements IAgreementEnforcementNotifier {
     
     guaranteeTermEvaluationMap.forEach((term, value) -> {
       if (term.getKpiName().startsWith(QoSMetric.availability.toString())) {
-        assert value.getViolations().isEmpty();
+        assert !value.getViolations().isEmpty();
       }
       
       if (term.getKpiName().startsWith(QoSMetric.load.toString())) {
-        assert !value.getViolations().isEmpty();
+        assert value.getViolations().isEmpty();
       }
     });
     

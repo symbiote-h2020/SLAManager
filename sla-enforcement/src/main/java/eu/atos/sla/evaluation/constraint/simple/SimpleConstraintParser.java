@@ -77,7 +77,7 @@ public class SimpleConstraintParser {
         }
     }
 
-    private final String regex = String.format("(\\w+) +(%1$s)(?: +[(]?(%2$s(?: *, *%2$s)*)[)]?)? *",
+    private final String regex = String.format("(\\w.+) +(%1$s)(?: +[(]?(%2$s(?: *, *%2$s)*)[)]?)? *",
             Operator.getAlternative(), 
             "(?:[+-]?\\d+\\.?\\d*)");
     private final Pattern re = Pattern.compile(regex);

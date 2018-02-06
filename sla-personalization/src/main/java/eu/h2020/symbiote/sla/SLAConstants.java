@@ -17,11 +17,11 @@
 package eu.h2020.symbiote.sla;
 
 public interface SLAConstants {
-  String EXCHANGE_NAME_SLAM = "symbiote.slam";
+  String EXCHANGE_NAME_SLAM = "symbIoTe.slam";
   String VIOLATION_KEY = "federation.sla.violation";
   
   String EXCHANGE_NAME_FM = "symbIoTe.federation";
-  String SLA_REGISTRATION_QUEUE_NAME = "symbIoTe.fm.sla.update";
+  String SLA_REGISTRATION_QUEUE_NAME = "symbIoTe.fm.sla.create";
   String SLA_UPDATE_QUEUE_NAME = "symbIoTe.fm.sla.update";
   String SLA_UNREGISTRATION_QUEUE_NAME = "symbIoTe.fm.sla.unregistration";
   String FEDERATION_CREATION_KEY = "symbIoTe.federation.created";

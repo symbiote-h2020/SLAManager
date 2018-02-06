@@ -98,6 +98,7 @@
             <version>2.0.2.RELEASE</version>
         </dependency>
 
+
         <dependency>
             <groupId>io.github.openfeign</groupId>
             <artifactId>feign-jackson</artifactId>

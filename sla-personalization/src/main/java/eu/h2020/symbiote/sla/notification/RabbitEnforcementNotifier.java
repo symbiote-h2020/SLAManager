@@ -23,12 +23,16 @@ import eu.atos.sla.notification.IAgreementEnforcementNotifier;
 import eu.atos.sla.notification.NotificationException;
 import eu.h2020.symbiote.sla.SLAConstants;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Map;
 
 public class RabbitEnforcementNotifier implements IAgreementEnforcementNotifier{
+  
+  private static final Logger logger = LoggerFactory.getLogger(RabbitEnforcementNotifier.class);
   
   @Autowired
   private RabbitTemplate rabbitTemplate;
@@ -39,6 +43,8 @@ public class RabbitEnforcementNotifier implements IAgreementEnforcementNotifier{
       Map<EGuaranteeTerm, GuaranteeTermEvaluator.GuaranteeTermEvaluationResult> guaranteeTermEvaluationMap)
       throws NotificationException {
     
+    logger.debug("Evaluation finished, checking violations for SLA " + agreement.getAgreementId());
+    
     ViolationNotification notification = new ViolationNotification();
     notification.setFederationId(agreement.getAgreementId());
     
@@ -47,11 +53,15 @@ public class RabbitEnforcementNotifier implements IAgreementEnforcementNotifier{
         Violation violation = new Violation();
         violation.setConstraint(term.getServiceLevel());
         violation.setActualValue(result.getViolations().get(0).getActualValue());
+        notification.getViolations().add(violation);
       }
     });
     
     if (!notification.getViolations().isEmpty()) {
+      logger.debug("Found violations for SLA " + agreement.getAgreementId() + ". Notifying...");
       rabbitTemplate.convertAndSend(SLAConstants.EXCHANGE_NAME_SLAM, SLAConstants.VIOLATION_KEY, notification);
+    } else {
+      logger.debug("No violations found for SLA " + agreement.getAgreementId());
     }
   }
 }

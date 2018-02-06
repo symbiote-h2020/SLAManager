@@ -44,10 +44,19 @@
         <property name="ignoreUnresolvablePlaceholders" value="true"/>
     </bean>
 
+    <bean id="jacksonRabbitConverter" class="org.springframework.amqp.support.converter.Jackson2JsonMessageConverter">
+        <property name="classMapper">
+            <bean class="org.springframework.amqp.support.converter.DefaultClassMapper">
+                <property name="defaultType" value="eu.h2020.symbiote.model.mim.Federation"/>
+            </bean>
+        </property>
+    </bean>
+
     <rabbit:connection-factory id="connectionFactory"
                                host="localhost" username="guest" password="guest" />
 
-    <rabbit:template id="amqpTemplate" connection-factory="connectionFactory"/>
+    <rabbit:template id="amqpTemplate" connection-factory="connectionFactory"
+                     message-converter="jacksonRabbitConverter"/>
 
     <bean id="rabbitListenerContainerFactory"
           class="org.springframework.amqp.rabbit.config.DirectRabbitListenerContainerFactory">
@@ -57,12 +66,14 @@
 
     <rabbit:admin connection-factory="connectionFactory" />
 
+	<rabbit:queue name="symbIoTe.fm.sla.create" durable="true" exclusive="true" auto-delete="true" />
+
     <rabbit:queue name="symbIoTe.fm.sla.update" durable="true" exclusive="true" auto-delete="true" />
 
     <rabbit:queue name="symbIoTe.fm.sla.unregistration" durable="true" exclusive="true" auto-delete="true"/>
 
     <rabbit:direct-exchange name="symbIoTe.federation" durable="true" />
 
-    <rabbit:direct-exchange name="symbiote.slam" durable="true" />
+    <rabbit:direct-exchange name="symbIoTe.slam" durable="true" />
 
 </beans>

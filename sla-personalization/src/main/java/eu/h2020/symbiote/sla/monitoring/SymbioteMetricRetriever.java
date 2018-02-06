@@ -29,6 +29,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -46,12 +47,17 @@ public class SymbioteMetricRetriever implements IMetricsRetriever,InitializingBe
   @Override
   public List<IMonitoringMetric> getMetrics(String agreementId, String serviceScope, String variable,
                                             Date begin, Date end, int maxResults) {
-    Map<String, Double> result = client.getSummaryMetric(serviceScope, variable);
+    try {
+      Map<String, Double> result = client.getSummaryMetric(agreementId, variable);
     
-    return result.entrySet().stream()
-               .map(entry -> new SymbioteMonitoringMetric(entry.getKey(), entry.getValue(), end))
-               .collect(Collectors.toList());
-    
+      return result.entrySet().stream()
+                 .map(entry -> new SymbioteMonitoringMetric(entry.getKey(), entry.getValue(), end))
+                 .collect(Collectors.toList());
+    } catch (Exception e) {
+      logger.warn("Error getting " + variable + " kpi for federation " + agreementId + ": " + e.getMessage());
+      return new ArrayList<>();
+    }
+  
   }
   
   @Override

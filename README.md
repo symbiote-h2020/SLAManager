@@ -28,6 +28,7 @@ It is currently used in:
 * [MODAClouds][4]
 * [SeaClouds][5]
 * [Fed4Fire][7]
+* [SymbIoTe][8]
 
 ##License##
 
@@ -41,3 +42,4 @@ Licensed under the [Apache License, Version 2.0][8]
 [6]: http:/fi-xifi.eu/
 [7]: http://www.fed4fire.eu/
 [8]: http://www.apache.org/licenses/LICENSE-2.0
+[8]: https://www.symbiote-h2020.eu/

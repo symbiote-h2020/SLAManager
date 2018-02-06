@@ -39,7 +39,7 @@ public class SymbioteMetricRetriever implements IMetricsRetriever,InitializingBe
   
   private static final Logger logger = LoggerFactory.getLogger(DummyMetricsRetriever.class);
   
-  @Value("${symbiote.monitoring.url}")
+  @Value("${SYMBIOTE_MONTORING_URL}")
   private String monitoringUrl;
   
   private MonitoringClient client;

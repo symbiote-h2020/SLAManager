@@ -53,7 +53,7 @@
     </bean>
 
     <rabbit:connection-factory id="connectionFactory"
-                               host="localhost" username="guest" password="guest" />
+                               host="${RABBIT_HOST}" username="${RABBIT_USERNAME}" password="${RABBIT_PASSWORD}" />
 
     <rabbit:template id="amqpTemplate" connection-factory="connectionFactory"
                      message-converter="jacksonRabbitConverter"/>

@@ -58,7 +58,7 @@ public class RabbitFederationListener {
   
   private static final Logger logger = LoggerFactory.getLogger(RabbitFederationListener.class);
   
-  @Value("${platform.id}")
+  @Value("${PLATFORM_ID}")
   private String platformId;
   
   @Autowired

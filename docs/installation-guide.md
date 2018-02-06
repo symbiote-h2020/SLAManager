@@ -17,6 +17,8 @@ The requirements to install a working copy of the sla core are:
 * Oracle JDK >=1.7
 * Database to install the database schema for the service: Mysql>=5.0
 * Maven >= 3.0
+* RabbitMQ
+* SymbIoTe Monitoring component
 
 ## <a name="installation"> Installation </a> ##
 
@@ -35,12 +37,12 @@ privileges, as root):
 
 	$ mysql -p -u root 
 	
-	mysql> CREATE DATABASE atossla;
+	mysql> CREATE DATABASE symbiote;
 
 Create a user:
 
-	mysql> CREATE USER atossla@localhost IDENTIFIED BY '_atossla_';
-	mysql> GRANT ALL PRIVILEGES ON atossla.* TO atossla@localhost; -- * optional WITH GRANT OPTION;
+	mysql> CREATE USER symbiote@localhost IDENTIFIED BY '_symbiote_';
+	mysql> GRANT ALL PRIVILEGES ON symbiote.* TO symbiote@localhost; -- * optional WITH GRANT OPTION;
 
 Create the database schema executing the following script (this runs the sql file in sla-repository/src/main/resources/atossla.sql):
 
@@ -49,25 +51,9 @@ Create the database schema executing the following script (this runs the sql fil
 The names used here are the default values of the sla core. See 
 [configuration](#configuration) to know how to change the values.
 
-###3. <a name="importeclipse"> Importing the code into eclipse </a> ###
+###3. <a name="importide"> Importing the code into an IDE </a> ###
 
-The core of the ATOSSLA has been developed using the Eclipse Java IDE, 
-although others Java editors could be used, here we only provide the 
-instructions about how to import the code into Eclipse.
-
-The first step is to tell Maven to create the necessary Eclipse project 
-files executing this:
-
-	$ mvn eclipse:eclipse
-
-The previous command is going to generate the eclipse project files: 
-.settings, .classpath, and .project. Again, please never upload those 
-files to the svn, it is going to deconfigure the eclipse of other 
-developers (it is easy to fix, just an annoying waste of time).
-
-After it, from your eclipse you can import the project. Go to 
-"import project from file", go to the trunk folder, and you should 
-see the "ATOSSLA" project ready to be imported in your Eclipse. 
+Most modern IDE such as Eclipse, Netbeans or IntelliJ open Maven projects directly or through an import wizard. Please, see your IDE documentation to see how it works.
 
 ## <a name="configuration"> Configuration </a> ##
 
@@ -76,7 +62,7 @@ The parameters on the SLA Framework can be classified into:
 * compile-time values: these specify static behaviour of the SLA core 
   (e.g. the class of the Monitoring adapter)
 * runtime values: these specify runtime configuration and its value should be set 
-  with an env var (e.g. the address of a KairosDB instance)
+  with an env var (e.g. the address of a MySQL or RabbitMQ instance)
 
 All compile-time configuration is done through the Spring context files, which build
 all the configurable objects. Several of these objects declared in the context files 
@@ -88,6 +74,7 @@ Several parameters (of both types) can be configured through this file.
    one in the section [Creating the mysql database](#database). It can be selected if queries from hibernate must be 
    shown or not. These parameters can be overriden at runtime time through the use of environment variables 
    (see section [Running](#running)),
+1. rabbit.\* allows to configure the RabbitMQ host, username and password.
 1. enforcement.\* several parameters from the enforcement can be customized,
 1. service.basicsecurity.\* basic security is enabled
    These parameters can be used to set the user name and password to access to the rest services.
@@ -99,8 +86,6 @@ they should be overriden at deployment time using env vars.
 
 Additional implementations may require the modification of the context files. In that case, it is 
 recommended to modify `sla-personalization/src/main/resources/personalization-context.xml`.
-
-Check the section [Additional configuration](#advancedconfig) for specific configuration.
 
 ## <a name="compiling"> Compiling </a> ##
 	
@@ -121,11 +106,26 @@ runserver.sh script runs the sla-core server using jetty runner on port 8080 and
 Some configuration parameters can be overriden using environment variables or jdk variables. The list of
 overridable parameters is:
 
-* `DB_DRIVER`; default value is `com.mysql.jdbc.Driver`
-* `DB_URL`; default value is `jdbc:mysql://${db.host}:${db.port}/${db.name}`
-* `DB_USERNAME`; default value is `${db.username}`
-* `DB_PASSWORD`; default value is `${db.password}`
-* `DB_SHOWSQL`; default value is `${db.showSQL}`
+**Mysql parameters**
+
+* `DB_DRIVER`: JDBC driver to use. Default value is `com.mysql.jdbc.Driver`
+* `DB_URL`: URL to a SQL database (MySQL preferred). Default value is `jdbc:mysql://${db.host}:${db.port}/${db.name}`
+* `DB_USERNAME`: Username for the aforementioned database. Default value is `${db.username}`
+* `DB_PASSWORD`: Password for the username above. Default value is `${db.password}`
+* `DB_SHOWSQL`: Log the SQL queries executed by the SLA manager. For debug purposes only. Default value is `${db.showSQL}`
+
+**RabbitMQ parameters**
+
+* `RABBIT_HOST`: Hostame of an accessible RabbitMQ instance. Default value is `${rabbit.host}`
+* `RABBIT_USERNAME`: User to use in this host. Default value is `${rabbit.username}`
+* `RABBIT_PASSWORD`: Password for the user. Default value is `${rabbit.password}`
+
+**SymbIoTe specific parameters**
+
+* `PLATFORM_ID`: ID of the current platform. Default value is `${platform.id}`
+* `SYMBIOTE_MONTORING_URL`: URL to the SymbIoTe monitoring component. Default value is `${symbiote.monitoring.url}`
+
+For default values, `${exp}` means `exp` value in the `configuration.properties` file at compilation time.
 
 F.e., to use a different database configuration:
 
@@ -151,34 +151,3 @@ Check that everything is working:
 	$ curl http://localhost:8080/api/providers
 
 Time to check the User Guide and the Developer Guide!
-
-## <a name="advancedconfig"> Additional configuration </a> ##
-
-### RestNotifier ###
-
-RestNotifier needs additional parameters to what is provided by default in `configuration.properties`.
-For this reason, it is recommended to modify 
-`sla-personalization/src/main/resources/personalization-context.xml`
-to add the construction of the RestNotifier. The following excerpt will create the RestNotifier taking
-`ACCOUNTING_URL`, `ACCOUNTING_URL_USER` and `ACCOUNTING_URL_PASSWORD` as parameters.
-
-    <bean id="notificationManager"  class="eu.atos.sla.notification.NotifierManager" primary="true">
-        <property name="agreementEnforcementNotifier">
-            <bean class="eu.atos.sla.notification.RestNotifier">
-                <constructor-arg value="${ACCOUNTING_URL}" />
-                <constructor-arg value="application/json" />
-                <constructor-arg value="${ACCOUNTING_URL_USER}" />
-                <constructor-arg value="${ACCOUNTING_URL_PASSWORD}" />
-            </bean>
-         </property>
-    </bean>
-
-
-The parameters are defined in `sla-personalization/src/main/resources/sla-env.properties`
-as empty by default, so use env vars to set them.
-
-F.e.:
-
-    $ export ACCOUNTING_URL=http://localhost:9000
-    $ bin/runserver.sh
-    

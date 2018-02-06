@@ -10,7 +10,7 @@ The requirements to install a working copy of the sla core are:
 * RabbitMQ
 * SymbIoTe Monitoring component
 
-###2. <a name="database"> Creating the mysql database </a> ###
+## <a name="database"> Creating the mysql database </a> ##
 
 From mysql command tool, create a database (with a user with sufficient 
 privileges, as root):

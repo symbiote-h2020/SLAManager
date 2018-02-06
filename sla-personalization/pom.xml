@@ -1,0 +1,147 @@
+<?xml version="1.0"?>
+<!--
+
+    Copyright 2017 Atos
+
+       Licensed under the Apache License, Version 2.0 (the "License");
+       you may not use this file except in compliance with the License.
+       You may obtain a copy of the License at
+
+           http://www.apache.org/licenses/LICENSE-2.0
+
+       Unless required by applicable law or agreed to in writing, software
+       distributed under the License is distributed on an "AS IS" BASIS,
+       WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+       See the License for the specific language governing permissions and
+       limitations under the License.
+
+-->
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>eu.atos.sla</groupId>
+        <artifactId>parent</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+    <artifactId>sla-personalization</artifactId>
+    <packaging>jar</packaging>
+    <name>SLA Project Personalization</name>
+
+    <repositories>
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
+    </repositories>
+
+    <dependencies>
+        <!-- import SLA projects -->
+        <dependency>
+            <groupId>eu.atos.sla</groupId>
+            <artifactId>sla-enforcement</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>eu.atos.sla</groupId>
+            <artifactId>sla-repository</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>eu.atos.sla</groupId>
+            <artifactId>sla-tools</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>eu.atos.sla</groupId>
+            <artifactId>sla-repository</artifactId>
+            <type>test-jar</type>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>eu.atos.sla</groupId>
+            <artifactId>sla-enforcement</artifactId>
+            <type>test-jar</type>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-all</artifactId>
+            <version>1.10.19</version>
+        </dependency>
+
+        <!-- symbiote dependencies -->
+        <dependency>
+            <groupId>com.github.symbiote-h2020</groupId>
+            <artifactId>SymbIoTeLibraries</artifactId>
+            <version>develop-SNAPSHOT</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.github.symbiote-h2020</groupId>
+                    <artifactId>SymbIoTeSecurity</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.symbiote-h2020</groupId>
+            <artifactId>SymbIoTeSecurity</artifactId>
+            <version>sla-manager-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.amqp</groupId>
+            <artifactId>spring-rabbit</artifactId>
+            <version>2.0.2.RELEASE</version>
+        </dependency>
+
+
+        <dependency>
+            <groupId>io.github.openfeign</groupId>
+            <artifactId>feign-jackson</artifactId>
+            <version>9.5.1</version>
+        </dependency>
+
+        <!-- Spring dependencies -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.hsqldb</groupId>
+            <artifactId>hsqldb</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+    </dependencies>
+    <build>
+        <filters>
+            <filter>../configuration.properties</filter>
+        </filters>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+                <includes>
+                    <include>**/*.xml</include>
+                    <include>**/*.properties</include>
+                </includes>
+            </resource>
+        </resources>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>

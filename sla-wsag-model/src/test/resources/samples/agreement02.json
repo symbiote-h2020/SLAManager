@@ -1,0 +1,97 @@
+{
+    "AgreementId": "agreement02",
+    "Name": "ExampleAgreement",
+    "Context": {
+        "AgreementInitiator": "client-prueba",
+        "ExpirationTime": "2014-03-07T12:00:00Z",
+        "TemplateId": "template02",
+        "Service": "service02",
+        "ServiceProvider": "AgreementResponder",
+        "AgreementResponder": "provider02"
+    },
+    "Terms": {
+        "All": {
+            "ServiceDescriptionTerm": null,
+            "ServiceProperties": [{
+                "Name": "ServiceProperties",
+                "ServiceName": "ServiceName",
+                "VariableSet": {
+                    "Variable": [{
+                        "Name": "metric1",
+                        "Metric": "xs:double",
+                        "Location": "metric1"
+                    }, {
+                        "Name": "metric2",
+                        "Metric": "xs:double",
+                        "Location": "metric2"
+                    }, {
+                        "Name": "metric3",
+                        "Metric": "xs:double",
+                        "Location": "metric3"
+                    }, {
+                        "Name": "metric4",
+                        "Metric": "xs:double",
+                        "Location": "metric4"
+                    }]
+                }
+            }],
+            "GuaranteeTerm": [{
+                "Name": "GT_Metric1",
+                "ServiceScope": {
+                    "ServiceName": "ServiceName",
+                    "value": ""
+                },
+                "ServiceLevelObjective": {
+                    "KPITarget": {
+                        "KPIName": "metric1",
+                        "CustomServiceLevel": {
+                            "any": [ {"Constraint" : "ResponseTime LT 200" } ]
+                        }
+                    }
+                }
+            }, {
+                "Name": "GT_Metric2",
+                "ServiceScope": {
+                    "ServiceName": "ServiceName",
+                    "value": ""
+                },
+                "ServiceLevelObjective": {
+                    "KPITarget": {
+                        "KPIName": "metric2",
+                        "CustomServiceLevel": {
+                            "any": [{"Constraint" : "metric2 BETWEEN (0.1, 1)"}]
+                        }
+                    }
+                }
+            }, {
+                "Name": "GT_Metric3",
+                "ServiceScope": {
+                    "ServiceName": "ServiceName",
+                    "value": ""
+                },
+                "ServiceLevelObjective": {
+                    "KPITarget": {
+                        "KPIName": "metric3",
+                        "CustomServiceLevel": {
+                            "any": [{"Constraint" : "metric3 BETWEEN (0.15, 1)"}]
+                        }
+                    }
+                }
+            }, {
+                "Name": "GT_Metric4",
+                "ServiceScope": {
+                    "ServiceName": "ServiceName",
+                    "value": ""
+                },
+                "ServiceLevelObjective": {
+                    "KPITarget": {
+                        "KPIName": "metric4",
+                        "CustomServiceLevel": {
+                            "any": [{"Constraint" : "metric4 BETWEEN (0.2, 1)"}]
+                        }
+                    }
+                }
+            }]
+        }
+    }
+}

@@ -15,15 +15,6 @@
  */
 package eu.atos.sla.evaluation.guarantee;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import eu.atos.sla.common.collections.CompositeList;
 import eu.atos.sla.datamodel.EAgreement;
 import eu.atos.sla.datamodel.EBreach;
@@ -32,6 +23,15 @@ import eu.atos.sla.datamodel.EPolicy;
 import eu.atos.sla.datamodel.EViolation;
 import eu.atos.sla.evaluation.constraint.IConstraintEvaluator;
 import eu.atos.sla.monitoring.IMonitoringMetric;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+import java.util.UUID;
 
 /**
  * Implements a ServiceLevelEvaluator that takes into account Policies. 
@@ -187,25 +187,38 @@ public class PoliciedServiceLevelEvaluator implements IServiceLevelEvaluator {
          * The policy is null, as the term has the default policy.
          */
         EViolation v = newViolation(
-                agreement, term, null, kpiName, actualValue, expectedValue, breach.getDate());
+                agreement, term, null, kpiName, actualValue, expectedValue, toBreach(agreement.getAgreementId(), breach));
         return v;
+    }
+    
+    private EBreach toBreach(String agreementId, IMonitoringMetric breach) {
+        EBreach newBreach = new EBreach();
+        newBreach.setAgreementUuid(agreementId);
+        newBreach.setDatetime(breach.getDate());
+        newBreach.setKpiName(breach.getMetricKey());
+        newBreach.setValue(breach.getMetricValue());
+        return newBreach;
     }
     
     private EViolation newViolation(final EAgreement contract, final EGuaranteeTerm term, 
             final EPolicy policy, final String kpiName, final String actualValue, 
-            final String expectedValue, final Date timestamp) {
+            final String expectedValue, final EBreach breach) {
 
         EViolation result = new EViolation();
         result.setUuid(UUID.randomUUID().toString());
         result.setContractUuid(contract.getAgreementId());
         result.setKpiName(kpiName);
-        result.setDatetime(timestamp);
+        result.setDatetime(breach.getDatetime());
         result.setExpectedValue(expectedValue);
         result.setActualValue(actualValue);
         result.setServiceName(term.getServiceName());
         result.setServiceScope(term.getServiceScope());
         result.setContractUuid(contract.getAgreementId());
         result.setPolicy(policy);
+        
+        List<EBreach> breaches = new ArrayList<>();
+        breaches.add(breach);
+        result.setBreaches(breaches);
         
         return result;
     }

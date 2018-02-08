@@ -16,11 +16,17 @@
  */
 package eu.h2020.symbiote.sla.notification;
 
+import java.util.Date;
+
 public class Violation {
   
   private String constraint;
   
   private String actualValue;
+  
+  private String deviceId;
+  
+  private Date date;
   
   public String getConstraint() {
     return constraint;
@@ -36,5 +42,21 @@ public class Violation {
   
   public void setActualValue(String actualValue) {
     this.actualValue = actualValue;
+  }
+  
+  public String getDeviceId() {
+    return deviceId;
+  }
+  
+  public void setDeviceId(String deviceId) {
+    this.deviceId = deviceId;
+  }
+  
+  public Date getDate() {
+    return date;
+  }
+  
+  public void setDate(Date date) {
+    this.date = date;
   }
 }

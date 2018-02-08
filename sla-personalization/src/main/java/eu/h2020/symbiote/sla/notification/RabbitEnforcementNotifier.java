@@ -17,7 +17,9 @@
 package eu.h2020.symbiote.sla.notification;
 
 import eu.atos.sla.datamodel.EAgreement;
+import eu.atos.sla.datamodel.EBreach;
 import eu.atos.sla.datamodel.EGuaranteeTerm;
+import eu.atos.sla.datamodel.EViolation;
 import eu.atos.sla.evaluation.guarantee.GuaranteeTermEvaluator;
 import eu.atos.sla.notification.IAgreementEnforcementNotifier;
 import eu.atos.sla.notification.NotificationException;
@@ -28,6 +30,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.List;
 import java.util.Map;
 
 public class RabbitEnforcementNotifier implements IAgreementEnforcementNotifier{
@@ -51,8 +54,17 @@ public class RabbitEnforcementNotifier implements IAgreementEnforcementNotifier{
     guaranteeTermEvaluationMap.forEach((term, result) -> {
       if ((result.getViolations() != null) && (!result.getViolations().isEmpty())) {
         Violation violation = new Violation();
+        EViolation slaViolation = result.getViolations().get(0);
         violation.setConstraint(term.getServiceLevel());
-        violation.setActualValue(result.getViolations().get(0).getActualValue());
+        violation.setActualValue(slaViolation.getActualValue());
+  
+        List<EBreach> breaches = slaViolation.getBreaches();
+        if (breaches != null && !breaches.isEmpty()) {
+          EBreach breach = breaches.get(0);
+          violation.setDeviceId(breach.getKpiName());
+          violation.setDate(breach.getDatetime());
+        }
+        
         notification.getViolations().add(violation);
       }
     });

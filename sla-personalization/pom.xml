@@ -78,19 +78,19 @@
             <groupId>com.github.symbiote-h2020</groupId>
             <artifactId>SymbIoTeLibraries</artifactId>
             <version>develop-SNAPSHOT</version>
-            <exclusions>
+            <!--exclusions>
                 <exclusion>
                     <groupId>com.github.symbiote-h2020</groupId>
                     <artifactId>SymbIoTeSecurity</artifactId>
                 </exclusion>
-            </exclusions>
+            </exclusions-->
         </dependency>
 
-        <dependency>
+        <!--dependency>
             <groupId>com.github.symbiote-h2020</groupId>
             <artifactId>SymbIoTeSecurity</artifactId>
             <version>sla-manager-SNAPSHOT</version>
-        </dependency>
+        </dependency-->
 
         <dependency>
             <groupId>org.springframework.amqp</groupId>

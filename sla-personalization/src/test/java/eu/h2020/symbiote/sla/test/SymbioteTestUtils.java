@@ -60,7 +60,7 @@ public class SymbioteTestUtils {
     QoSConstraint load = new QoSConstraint();
     load.setMetric(QoSMetric.load);
     load.setComparator(Comparator.lessThan);
-    load.setThreshold(75);
+    load.setThreshold(75.0);
   
     constraints.add(load);
   

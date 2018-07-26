@@ -66,13 +66,13 @@
 
     <rabbit:admin connection-factory="connectionFactory" />
 
-	<rabbit:queue name="symbIoTe.fm.sla.create" durable="true" exclusive="true" auto-delete="true" />
+	<!--<rabbit:queue name="symbIoTe.fm.sla.create" durable="true" exclusive="true" auto-delete="true" />-->
 
-    <rabbit:queue name="symbIoTe.fm.sla.update" durable="true" exclusive="true" auto-delete="true" />
+    <!--<rabbit:queue name="symbIoTe.fm.sla.update" durable="true" exclusive="true" auto-delete="true" />-->
 
-    <rabbit:queue name="symbIoTe.fm.sla.unregistration" durable="true" exclusive="true" auto-delete="true"/>
+    <!--<rabbit:queue name="symbIoTe.fm.sla.unregistration" durable="true" exclusive="true" auto-delete="true"/>-->
 
-    <rabbit:direct-exchange name="symbIoTe.federation" durable="true" />
+    <!--<rabbit:direct-exchange name="symbIoTe.federation" durable="true" />-->
 
     <rabbit:direct-exchange name="symbIoTe.slam" durable="true" />
 

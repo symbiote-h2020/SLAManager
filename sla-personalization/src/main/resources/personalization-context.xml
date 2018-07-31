@@ -72,7 +72,7 @@
 
     <rabbit:queue name="symbIoTe.fm.sla.unregistration" durable="true" exclusive="true" auto-delete="true"/>
 
-    <rabbit:direct-exchange name="symbIoTe.federation" durable="true" />
+    <rabbit:topic-exchange name="symbIoTe.federation" durable="false" />
 
     <rabbit:direct-exchange name="symbIoTe.slam" durable="true" />
 

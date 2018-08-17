@@ -26,11 +26,11 @@ All commands shown here are ready to be executed from the
 root directory of the project (i.e., the one with the 
 _configuration.properties_ file) 
 
-###1. <a name="download"> Download the project </a> ###
+### 1. <a name="download"> Download the project </a> ###
 
 Download the project using a git client: `git clone <url>`
 
-###2. <a name="database"> Creating the mysql database </a> ###
+### 2. <a name="database"> Creating the mysql database </a> ###
 
 From mysql command tool, create a database (with a user with sufficient 
 privileges, as root):
@@ -51,7 +51,7 @@ Create the database schema executing the following script (this runs the sql fil
 The names used here are the default values of the sla core. See 
 [configuration](#configuration) to know how to change the values.
 
-###3. <a name="importide"> Importing the code into an IDE </a> ###
+### 3. <a name="importide"> Importing the code into an IDE </a> ###
 
 Most modern IDE such as Eclipse, Netbeans or IntelliJ open Maven projects directly or through an import wizard. Please, see your IDE documentation to see how it works.
 

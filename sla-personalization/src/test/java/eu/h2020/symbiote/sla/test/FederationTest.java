@@ -32,6 +32,8 @@ import eu.h2020.symbiote.sla.federation.RabbitFederationListener;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.amqp.core.Message;
+import org.springframework.amqp.core.MessageProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.test.context.ContextConfiguration;
@@ -91,7 +93,7 @@ public class FederationTest {
     
     verifyFederation();
     
-    listener.federationRemoval(SymbioteTestUtils.toMessage(federation));
+    listener.federationRemoval(new Message(federation.getId().getBytes(), new MessageProperties()));
     
     assert providerDAO.getByName(platformId) != null;
     

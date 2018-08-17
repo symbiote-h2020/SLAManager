@@ -23,6 +23,8 @@ import eu.atos.sla.datamodel.EViolation;
 import eu.atos.sla.evaluation.guarantee.GuaranteeTermEvaluator;
 import eu.atos.sla.notification.IAgreementEnforcementNotifier;
 import eu.atos.sla.notification.NotificationException;
+import eu.h2020.symbiote.cloud.sla.model.Violation;
+import eu.h2020.symbiote.cloud.sla.model.ViolationNotification;
 import eu.h2020.symbiote.sla.SLAConstants;
 
 import org.slf4j.Logger;

@@ -1,4 +1,4 @@
-# SLA Core Installation Guide #
+# SLA Manager Installation Guide #
 
 * [Requirements](#requirements)
 * [Installation](#installation)
@@ -148,6 +148,6 @@ If you want to use another log4j configuration, you can pass a different propert
 
 Check that everything is working:
 
-	$ curl http://localhost:8080/api/providers
+	$ curl http://localhost:8200/api/providers
 
 Time to check the User Guide and the Developer Guide!

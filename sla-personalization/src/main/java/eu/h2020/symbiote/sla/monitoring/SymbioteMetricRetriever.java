@@ -37,7 +37,7 @@ import java.util.stream.Collectors;
 
 public class SymbioteMetricRetriever implements IMetricsRetriever,InitializingBean {
   
-  private static final Logger logger = LoggerFactory.getLogger(DummyMetricsRetriever.class);
+  private static final Logger logger = LoggerFactory.getLogger(SymbioteMetricRetriever.class);
   
   @Value("${SYMBIOTE_MONTORING_URL}")
   private String monitoringUrl;

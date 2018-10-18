@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 #
 # Usage: $0 [port]
 #   port: listening port; defaults to 8200

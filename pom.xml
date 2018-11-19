@@ -50,18 +50,21 @@
         <apache-rat-plugin.version>0.12</apache-rat-plugin.version>
 
         <jersey.version>2.23.2</jersey.version>
-        <spring.version>5.0.7.RELEASE</spring.version>
-        <spring.security.version>5.0.1.RELEASE</spring.security.version>
+        <spring.version>5.1.2.RELEASE</spring.version>
+        <spring.security.version>5.1.1.RELEASE</spring.security.version>
         <slf4j.version>1.7.7</slf4j.version>
         <junit.version>4.12</junit.version>
         <commons-httpclient.version>3.1</commons-httpclient.version>
         <jackson.version>2.9.7</jackson.version>
         <hsqldb.version>2.3.0</hsqldb.version>
-        <jetty.version>9.4.8.v20171121</jetty.version>
-        <lombok.version>1.16.8</lombok.version>
+        <jetty.version>9.3.25.v20180904</jetty.version>
+        <lombok.version>1.18.4</lombok.version>
         <jaxrs-api.version>2.0.1</jaxrs-api.version>
         <kairosdb-client.version>2.1.0</kairosdb-client.version>
         <mockwebserver.version>3.8.1</mockwebserver.version>
+
+        <!-- Java 9+ dependencies -->
+        <javax.xml.version>2.3.0</javax.xml.version>
     </properties>
 
     <build>

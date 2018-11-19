@@ -24,6 +24,8 @@ Create a user:
 	mysql> CREATE USER symbiote@localhost IDENTIFIED BY '_symbiote_';
 	mysql> GRANT ALL PRIVILEGES ON symbiote.* TO symbiote@localhost; -- * optional WITH GRANT OPTION;
 
+This will create a database named `symbiote` and a user named `symbiote` as well with password `_symbiote_` with full access to the `symbiote` database. For security reasons, please, do personalize this parameters with your own credentials and database name and include them in the sla [configuration](#configuration) properties.
+
 Create the database schema executing the following script (this runs the sql file in sla-repository/src/main/resources/atossla.sql):
 
 	$ bin/restoreDatabase.sh

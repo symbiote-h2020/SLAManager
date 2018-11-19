@@ -62,6 +62,7 @@
           class="org.springframework.amqp.rabbit.config.DirectRabbitListenerContainerFactory">
         <property name="connectionFactory" ref="connectionFactory"/>
         <property name="consumersPerQueue" value="3"/>
+        <property name="defaultRequeueRejected" value="false"/>
     </bean>
 
     <rabbit:admin connection-factory="connectionFactory" />

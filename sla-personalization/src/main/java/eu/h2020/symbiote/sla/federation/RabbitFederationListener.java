@@ -33,6 +33,7 @@ import eu.h2020.symbiote.sla.SLAConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.core.Message;
+import org.springframework.amqp.rabbit.annotation.Argument;
 import org.springframework.amqp.rabbit.annotation.Exchange;
 import org.springframework.amqp.rabbit.annotation.Queue;
 import org.springframework.amqp.rabbit.annotation.QueueBinding;
@@ -83,7 +84,12 @@ public class RabbitFederationListener {
                     value = SLAConstants.SLA_UNREGISTRATION_QUEUE_NAME,
                     durable = "true",
                     exclusive = "true",
-                    autoDelete = "true"),
+                    autoDelete = "true",
+                    arguments=
+                            {@Argument(
+                                    name = "x-message-ttl",
+                                    value="${RABBIT_REPLY_TIMEOUT}",
+                                    type="java.lang.Integer")}),
             exchange = @Exchange(
                     value = "${EXCHANGE_NAME_FM}",
                     type = "${EXCHANGE_TYPE_FM}",
@@ -104,7 +110,12 @@ public class RabbitFederationListener {
                     value = SLAConstants.SLA_UPDATE_QUEUE_NAME,
                     durable = "true",
                     exclusive = "true",
-                    autoDelete = "true"),
+                    autoDelete = "true",
+                    arguments=
+                            {@Argument(
+                                    name = "x-message-ttl",
+                                    value="${RABBIT_REPLY_TIMEOUT}",
+                                    type="java.lang.Integer")}),
             exchange = @Exchange(
                     value = "${EXCHANGE_NAME_FM}",
                     type = "${EXCHANGE_TYPE_FM}",
@@ -170,7 +181,12 @@ public class RabbitFederationListener {
                     value = SLAConstants.SLA_REGISTRATION_QUEUE_NAME,
                     durable = "true",
                     exclusive = "true",
-                    autoDelete = "true"),
+                    autoDelete = "true",
+                    arguments=
+                            {@Argument(
+                                    name = "x-message-ttl",
+                                    value="${RABBIT_REPLY_TIMEOUT}",
+                                    type="java.lang.Integer")}),
             exchange = @Exchange(
                     value = "${EXCHANGE_NAME_FM}",
                     type = "${EXCHANGE_TYPE_FM}",
